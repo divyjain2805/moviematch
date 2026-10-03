@@ -4,6 +4,11 @@ MovieMatch is a semantic movie discovery demo with a React/Vite frontend and an
 Express API. The API uses OpenRouter embeddings to rank the movie vectors in
 `backend/movieVectors.json`.
 
+## Live demo
+
+Try MovieMatch at [moviematch-quks.onrender.com](https://moviematch-quks.onrender.com).
+The free Render instance may take a little time to wake after inactivity.
+
 ## Requirements
 
 - Node.js 20.19+ or 22.12+
@@ -43,14 +48,13 @@ Express API. The API uses OpenRouter embeddings to rank the movie vectors in
 
 ## Deploy to Render
 
-This repository includes a Render Blueprint in `render.yaml`. In Render, create
-a new Blueprint and select this GitHub repository. Render will build the frontend,
-install the backend dependencies, and run the Express server, which serves both
-the API and the built frontend from the same origin.
+This repository includes a Render Blueprint in `render.yaml`. It deploys the
+frontend and API together as one web service. To create or sync the service,
+select this GitHub repository in Render.
 
 When prompted, set `OPENROUTER_API_KEY` to your OpenRouter key. The service uses
 Render's assigned `PORT` and exposes `/health` as its health-check endpoint.
-After deployment, open the `*.onrender.com` service URL.
+After deployment, open the service's `*.onrender.com` URL.
 
 ## Validation
 
