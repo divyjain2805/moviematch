@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: moviematch
+    runtime: node
+    plan: free
+    buildCommand: npm ci --prefix backend && npm ci --prefix frontend && npm run build --prefix frontend
+    startCommand: npm start --prefix backend
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 22.12.0
+      - key: OPENROUTER_API_KEY
+        sync: false

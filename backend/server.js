@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
+const api = express.Router();
 
 app.use(cors());
 app.use(express.json());
@@ -11,20 +13,17 @@ const getEmbedding = require("./services/embeddings"); //2nd
 const { getMovieVectors } = require("./services/movieStore");
 const cosineSimilarity = require("./services/cosineSimilarity");
 
-const movieVectors = require("./movieVectors.json");
+const frontendDist = path.join(__dirname, "..", "frontend", "dist");
 
-
-app.get("/", (req, res) => {
-    res.json({
-        message: "Movie Recommendation API Running"
-    });
+app.get("/health", (req, res) => {
+    res.json({ status: "ok" });
 });
 
-app.get("/movies", (req, res) => {
+api.get("/movies", (req, res) => {
     res.json(movies);
 });
 
-app.get("/test-embedding", async (req, res) => {
+api.get("/test-embedding", async (req, res) => {
     const embedding = await getEmbedding(
         "space movie with astronauts"
     );
@@ -34,7 +33,7 @@ app.get("/test-embedding", async (req, res) => {
     });
 });
 
-app.get("/vectors", (req, res) => {
+api.get("/vectors", (req, res) => {
 
     const vectors =
         getMovieVectors();
@@ -50,7 +49,7 @@ app.get("/vectors", (req, res) => {
 });
 
 
-app.post("/search", async (req, res) => {
+api.post("/search", async (req, res) => {
 
     try {
 
@@ -94,7 +93,7 @@ app.post("/search", async (req, res) => {
     }
 });
 
-app.get("/similar/:title", (req, res) => {
+api.get("/similar/:title", (req, res) => {
 
     try {
 
@@ -153,7 +152,21 @@ app.get("/similar/:title", (req, res) => {
 
 });
 
+app.use("/api", api);
 
+app.use("/api", (req, res) => {
+    res.status(404).json({ error: "API route not found" });
+});
+
+app.use(express.static(frontendDist));
+
+app.get("/{*path}", (req, res, next) => {
+    res.sendFile(path.join(frontendDist, "index.html"), (error) => {
+        if (error) {
+            next(error);
+        }
+    });
+});
 
 const PORT = process.env.PORT || 5000;
 

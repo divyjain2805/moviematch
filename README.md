@@ -41,14 +41,20 @@ Express API. The API uses OpenRouter embeddings to rank the movie vectors in
    Open the URL printed by Vite. Its development proxy forwards `/api` requests
    to the API on port 5000.
 
+## Deploy to Render
+
+This repository includes a Render Blueprint in `render.yaml`. In Render, create
+a new Blueprint and select this GitHub repository. Render will build the frontend,
+install the backend dependencies, and run the Express server, which serves both
+the API and the built frontend from the same origin.
+
+When prompted, set `OPENROUTER_API_KEY` to your OpenRouter key. The service uses
+Render's assigned `PORT` and exposes `/health` as its health-check endpoint.
+After deployment, open the `*.onrender.com` service URL.
+
 ## Validation
 
 From `frontend`, run `npm run lint` and `npm run build`. From `backend`, run
 `node --check server.js` to check the API entry point syntax.
 
-## Hosting note
-
-Pushing this project to GitHub publishes the source code; it does not run the
-Express API. GitHub Pages can host only the static frontend, so a live deployment
-also needs a separately hosted API and a frontend API URL configured for that
-deployment. Never put `OPENROUTER_API_KEY` in frontend code or a `VITE_*` variable.
+Never put `OPENROUTER_API_KEY` in frontend code or a `VITE_*` variable.
